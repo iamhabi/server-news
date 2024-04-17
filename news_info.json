@@ -1,0 +1,32 @@
+[
+    {
+        "parent_url": "https://news.hada.io/",
+        "url": "https://news.hada.io/new",
+        "tag": "a",
+        "attr": ["rel", "nofollow"]
+    },
+    {
+        "parent_url": "https://news.ycombinator.com/",
+        "url": "https://news.ycombinator.com/",
+        "tag": "span",
+        "attr": ["class", "titleline"]
+    },
+    {
+        "parent_url": "https://www.theguardian.com/",
+        "url": "https://www.theguardian.com/technology/all",
+        "tag": "a",
+        "attr": ["class", "js-headline-text"]
+    },
+    {
+        "parent_url": "https://www.itworld.co.kr",
+        "url": "https://www.itworld.co.kr/news",
+        "tag": "h5",
+        "attr": ["class", "card-title"]
+    },
+    {
+        "parent_url": "https://yozm.wishket.com",
+        "url": "https://yozm.wishket.com/magazine/list/new/",
+        "tag": "a",
+        "attr": ["class", "item-title"]
+    }
+]

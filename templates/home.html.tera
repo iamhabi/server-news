@@ -1,0 +1,17 @@
+{% extends "home-base" %}
+
+{% block content %}
+
+<div class="gallery">
+    <h1>news</h1>
+    <hr>
+
+    {% for n in news %}
+        <div class="news">
+            <a href="{{ n.link }}" target="_blank">{{ n.title }}</a>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}
