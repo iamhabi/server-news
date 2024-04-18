@@ -45,6 +45,7 @@ pub fn get_news() -> Vec<News> {
     
     news
         .select(News::as_select())
+        .order_by(schema::news::id.desc())
         .load(connection)
         .expect("Error loading news")
 }
