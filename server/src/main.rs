@@ -2,7 +2,6 @@
 extern crate rocket;
 
 use rocket_dyn_templates::Template;
-use rocket::tokio::runtime::Runtime;
 
 use std::collections::HashMap;
 
@@ -19,23 +18,9 @@ async fn home() -> Template {
     Template::render("home", map)
 }
 
-fn loop_scrap_news() {
-    let delay_time = std::time::Duration::from_millis(1000 * 60 * 60);
-
-    let runtime = Runtime::new().unwrap();
-
-    runtime.spawn(async move {
-        loop {
-            scrap::scrap();
-
-            std::thread::sleep(delay_time);
-        }
-    });
-}
-
 #[rocket::launch]
 pub fn rocket() -> _ {
-    loop_scrap_news();
+    scrap::loop_scrap();
 
     rocket::build()
         .mount("/", routes![home])
