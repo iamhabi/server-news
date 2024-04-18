@@ -24,7 +24,7 @@ fn loop_scrap_news() {
 
     let runtime = Runtime::new().unwrap();
 
-    runtime.block_on(async move {
+    runtime.spawn(async move {
         loop {
             scrap::scrap();
 
@@ -35,7 +35,7 @@ fn loop_scrap_news() {
 
 #[rocket::launch]
 pub fn rocket() -> _ {
-    // loop_scrap_news();
+    loop_scrap_news();
 
     rocket::build()
         .mount("/", routes![home])

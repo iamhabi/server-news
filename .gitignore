@@ -2,3 +2,4 @@
 /server/target
 /scrap/target
 /sql/target
+.env
