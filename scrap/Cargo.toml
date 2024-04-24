@@ -12,3 +12,4 @@ reqwest = "*"
 soup = "*"
 tokio = { version = "*", features = ["full"] }
 sql = { path = "../sql" }
+chrono = "*"

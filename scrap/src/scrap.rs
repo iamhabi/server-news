@@ -5,8 +5,11 @@ use soup::prelude::*;
 
 use tokio::runtime::Runtime;
 
+use chrono::{DateTime, Utc};
+
 use std::fs::File;
 use std::io::Read;
+use std::time::SystemTime;
 
 use sql;
 
@@ -28,6 +31,8 @@ pub fn scrap_news() {
             get_news_from_url(info).await;
         });
     }
+
+    print_scrap_time();
 }
 
 async fn get_news_from_url(info: ScrapInfo) {
@@ -71,4 +76,12 @@ fn get_scrap_infos() -> Vec<ScrapInfo> {
         .expect("Failed to parse json");
 
     serde_json::from_str(&data).unwrap()
+}
+
+fn print_scrap_time() {
+    let now = SystemTime::now();
+
+    let datetime = DateTime::<Utc>::from(now);
+
+    print!("{}", datetime.format("%Y-%m-%d %H:%M:%S").to_string());
 }
