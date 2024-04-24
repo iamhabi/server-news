@@ -38,7 +38,7 @@ pub fn insert_news(title: &str, link: &str) -> News {
         .expect("Error saving news")
 }
 
-pub fn get_news() -> Vec<News> {
+pub fn get_news(limit: i64, offset: i64) -> Vec<News> {
     use self::schema::news::dsl::*;
 
     let connection = &mut establish_connection();
@@ -46,6 +46,8 @@ pub fn get_news() -> Vec<News> {
     news
         .select(News::as_select())
         .order_by(schema::news::id.desc())
+        .limit(limit)
+        .offset(offset)
         .load(connection)
         .expect("Error loading news")
 }
