@@ -2147,6 +2147,8 @@ dependencies = [
  "rocket",
  "rocket_dyn_templates",
  "scrap",
+ "serde",
+ "serde_json",
  "sql",
 ]
 
