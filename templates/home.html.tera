@@ -4,6 +4,13 @@
 
 <div class="gallery">
     <h1>news</h1>
+
+    <select id="count" onchange="onSelectCount()">
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100" selected="selected">100</option>
+    </select>
+
     <hr>
 
     {% for n in news %}
@@ -13,5 +20,35 @@
         </div>
     {% endfor %}
 </div>
+
+<script>
+onLoadPage();
+
+function onLoadPage() {
+    let count = localStorage['count'] || 100;
+
+    const select = document.getElementById("count");
+
+    select.value = count;
+    
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+
+    if (params.limit != count) {
+        window.location.href = "/?limit=" + count;
+    }
+}
+
+function onSelectCount() {
+    const select = document.getElementById("count");
+
+    let selectedCount = select.value;
+
+    localStorage['count'] = selectedCount;
+
+    window.location.href = "/?limit=" + selectedCount;
+}
+</script>
 
 {% endblock content %}
