@@ -9,12 +9,12 @@ use std::collections::HashMap;
 use sql;
 use scrap;
 
-#[get("/?<limit>&<offset>")]
-async fn home(limit: Option<i64>, offset: Option<i64>) -> Template {
-    let limit = limit.unwrap_or(100);
+#[get("/?<count>&<offset>")]
+async fn home(count: Option<i64>, offset: Option<i64>) -> Template {
+    let count = count.unwrap_or(100);
     let offset = offset.unwrap_or(0);
 
-    let news = sql::get_news(limit, offset);
+    let news = sql::get_news(count, offset);
 
     let mut map = HashMap::new();
     map.insert("news", news);
@@ -22,12 +22,12 @@ async fn home(limit: Option<i64>, offset: Option<i64>) -> Template {
     Template::render("home", map)
 }
 
-#[get("/json?<limit>&<offset>")]
-pub fn get_news_as_json(limit: Option<i64>, offset: Option<i64>) -> Json<Vec<sql::models::News>> {
-    let limit = limit.unwrap_or(100);
+#[get("/json?<count>&<offset>")]
+pub fn get_news_as_json(count: Option<i64>, offset: Option<i64>) -> Json<Vec<sql::models::News>> {
+    let count = count.unwrap_or(100);
     let offset = offset.unwrap_or(0);
 
-    let news = sql::get_news(limit, offset);
+    let news = sql::get_news(count, offset);
 
     Json(news)
 }

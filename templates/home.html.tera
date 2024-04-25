@@ -35,8 +35,8 @@ function onLoadPage() {
         get: (searchParams, prop) => searchParams.get(prop),
     });
 
-    if (params.limit != count) {
-        window.location.href = "/?limit=" + count;
+    if (params.count != count) {
+        window.location.href = "/?count=" + count;
     }
 }
 
@@ -47,7 +47,7 @@ function onSelectCount() {
 
     localStorage['count'] = selectedCount;
 
-    window.location.href = "/?limit=" + selectedCount;
+    window.location.href = "/?count=" + selectedCount;
 }
 </script>
 
