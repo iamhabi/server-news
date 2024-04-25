@@ -1,3 +1,4 @@
+use diesel::associations::HasTable;
 use diesel::{ Connection, ExpressionMethods, PgConnection, RunQueryDsl, SelectableHelper };
 use diesel::prelude::*;
 use dotenvy::dotenv;
@@ -50,4 +51,15 @@ pub fn get_news(limit: i64, offset: i64) -> Vec<News> {
         .offset(offset)
         .load(connection)
         .expect("Error loading news")
+}
+
+pub fn get_count() -> i64 {
+    use self::schema::news::dsl::*;
+
+    let connection = &mut establish_connection();
+
+    news::table()
+        .count()
+        .get_result(connection)
+        .expect("Error get size")
 }
