@@ -12,44 +12,33 @@
     </select>
 
     <br/><br/>
-
+    
     <div class="pagination">
-        {% for i in range(start=1, end=data.page_count) %}
-        <a id="top_page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
-        {% endfor %}
     </div>
 
     <br/><br/><hr/>
 
     {% for n in data.news %}
         <div class="news">
-            <a href="{{ n.link }}" target="_blank">{{ n.title }}</a>
+            <a class="content" href="{{ n.link }}" target="_blank">{{ n.title }}</a>
             <hr>
         </div>
     {% endfor %}
 
     <div class="pagination">
-        {% for i in range(start=1, end=data.page_count) %}
-        <a id="bottom_page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
-        {% endfor %}
     </div>
-
 </div>
 
 <script>
 onLoadPage();
 
 function onLoadPage() {
-    let count = localStorage['count'] || 100;
-    let page = localStorage['page'] || 1;
+    let count = parseInt(localStorage['count']) || 100;
+    let page = parseInt(localStorage['page']) || 1;
 
     const select = document.getElementById("count");
-    const aTop = document.getElementById("top_page" + page);
-    const aBottom = document.getElementById("bottom_page" + page);
 
     select.value = count;
-    aTop.className = "active";
-    aBottom.className = "active";
     
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
@@ -77,6 +66,79 @@ function onSelectPage(page) {
 
     window.location.reload();
 }
+
+// https://stackoverflow.com/a/46385144
+
+function getPageList(totalPages, page, maxLength) {
+    if (maxLength < 5) throw "maxLength must be at least 5";
+
+    function range(start, end) {
+        return Array.from(Array(end - start + 1), (_, i) => i + start); 
+    }
+
+    var sideWidth = maxLength < 9 ? 1 : 2;
+    var leftWidth = (maxLength - sideWidth*2 - 3) >> 1;
+    var rightWidth = (maxLength - sideWidth*2 - 2) >> 1;
+
+    if (totalPages <= maxLength) {
+        // no breaks in list
+        return range(1, totalPages);
+    }
+
+    if (page <= maxLength - sideWidth - 1 - rightWidth) {
+        // no break on left of page
+        return range(1, maxLength - sideWidth - 1)
+            .concat(0, range(totalPages - sideWidth + 1, totalPages));
+    }
+
+    if (page >= totalPages - sideWidth - 1 - rightWidth) {
+        // no break on right of page
+        return range(1, sideWidth)
+            .concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+    }
+    
+    // Breaks on both sides
+    return range(1, sideWidth)
+        .concat(0, range(page - leftWidth, page + rightWidth),
+                0, range(totalPages - sideWidth + 1, totalPages));
+}
+
+$(function () {
+    var paginationSize = 7; 
+    var totalPages = {{ data.page_count }};
+    
+    var currentPage = parseInt(localStorage['page']) || 1;
+
+    function showPage(whichPage) {
+        if (whichPage < 1 || whichPage > totalPages) return false;
+
+        currentPage = whichPage;
+
+        $(".pagination").children().remove();
+
+        getPageList(totalPages, currentPage, paginationSize).forEach( item => {
+            $(".pagination").append(
+                $("<a>")
+                    .addClass(item ? "current-page" : "disabled")
+                    .toggleClass("active", item === currentPage)          
+                    .attr({
+                        onclick: "onSelectPage(" + item + ")"
+                    })
+                    .text(item || "...")
+            )
+        });
+
+        return true;
+    }
+
+    // Show the page links
+    showPage(currentPage);
+
+    // Use event delegation, as these items are recreated later    
+    $(document).on("click", ".pagination.current-page:not(.active)", function () {
+        return showPage(+$(this).text());
+    });
+});
 </script>
 
 {% endblock content %}
