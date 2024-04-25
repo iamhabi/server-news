@@ -12,7 +12,7 @@
     </select>
 
     <div class="pagination">
-        {% for i in range(start=1, end=data.count) %}
+        {% for i in range(start=1, end=data.page_count) %}
         <a id="page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
         {% endfor %}
     </div>
