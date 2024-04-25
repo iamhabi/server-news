@@ -11,9 +11,11 @@
         <option value="100">100</option>
     </select>
 
+    <br/><br/>
+
     <div class="pagination">
         {% for i in range(start=1, end=data.page_count) %}
-        <a id="page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
+        <a id="top_page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
         {% endfor %}
     </div>
 
@@ -25,6 +27,13 @@
             <hr>
         </div>
     {% endfor %}
+
+    <div class="pagination">
+        {% for i in range(start=1, end=data.page_count) %}
+        <a id="bottom_page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
+        {% endfor %}
+    </div>
+
 </div>
 
 <script>
@@ -35,10 +44,12 @@ function onLoadPage() {
     let page = localStorage['page'] || 1;
 
     const select = document.getElementById("count");
-    const a = document.getElementById("page" + page);
+    const aTop = document.getElementById("top_page" + page);
+    const aBottom = document.getElementById("bottom_page" + page);
 
     select.value = count;
-    a.className = "active";
+    aTop.className = "active";
+    aBottom.className = "active";
     
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
