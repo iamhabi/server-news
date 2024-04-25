@@ -8,12 +8,18 @@
     <select id="count" onchange="onSelectCount()">
         <option value="25">25</option>
         <option value="50">50</option>
-        <option value="100" selected="selected">100</option>
+        <option value="100">100</option>
     </select>
 
-    <hr>
+    <div class="pagination">
+        {% for i in range(start=1, end=data.count) %}
+        <a id="page{{ i }}" onclick="onSelectPage({{ i }})">{{ i }}</a>
+        {% endfor %}
+    </div>
 
-    {% for n in news %}
+    <br/><br/><hr/>
+
+    {% for n in data.news %}
         <div class="news">
             <a href="{{ n.link }}" target="_blank">{{ n.title }}</a>
             <hr>
@@ -26,26 +32,37 @@ onLoadPage();
 
 function onLoadPage() {
     let count = localStorage['count'] || 100;
+    let page = localStorage['page'] || 1;
 
     const select = document.getElementById("count");
+    const a = document.getElementById("page" + page);
 
     select.value = count;
+    a.className = "active";
     
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
 
-    if (params.count != count) {
-        window.location.href = "/?count=" + count;
+    var query = "/?count=" + count + "&page=" + page;
+
+    if (params.count != count || params.page != page) {
+        window.location.href = query;
     }
 }
 
 function onSelectCount() {
     const select = document.getElementById("count");
 
-    let selectedCount = select.value;
+    let count = select.value;
 
-    localStorage['count'] = selectedCount;
+    localStorage['count'] = count;
+
+    window.location.reload();
+}
+
+function onSelectPage(page) {
+    localStorage['page'] = page;
 
     window.location.reload();
 }
