@@ -47,7 +47,7 @@ function onSelectCount() {
 
     localStorage['count'] = selectedCount;
 
-    window.location.href = "/?count=" + selectedCount;
+    window.location.reload();
 }
 </script>
 
