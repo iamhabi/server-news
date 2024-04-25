@@ -1,3 +1,19 @@
+.gallery {
+    margin: 0 auto;
+    max-width: 800px;
+    height: 100%;
+}
+
+a {
+    height: auto;
+    text-decoration: none;
+    color: black;
+}
+
+a:visited {
+    color: gray;
+}
+
 .pagination a {
     color: black;
     float: left;
