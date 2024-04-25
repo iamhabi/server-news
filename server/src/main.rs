@@ -32,11 +32,16 @@ pub fn get_news_as_json(limit: Option<i64>, offset: Option<i64>) -> Json<Vec<sql
     Json(news)
 }
 
+#[get("/count")]
+async fn get_count() -> Json<i64> {
+    Json(sql::get_count())
+}
+
 #[rocket::launch]
 pub fn rocket() -> _ {
     scrap::loop_scrap();
 
     rocket::build()
-        .mount("/", routes![home, get_news_as_json])
+        .mount("/", routes![home, get_news_as_json, get_count])
         .attach(Template::fairing())
 }
