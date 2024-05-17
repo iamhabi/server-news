@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate rocket;
 
+use rocket::Shutdown;
 use serde::{Serialize, Deserialize};
 use rocket::serde::json::Json;
 use rocket::fs::{ FileServer, relative };
@@ -40,7 +41,7 @@ async fn home(count: Option<i64>, page: Option<i64>) -> Template {
 }
 
 #[get("/json?<count>&<offset>")]
-pub fn get_news_as_json(count: Option<i64>, offset: Option<i64>) -> Json<Vec<sql::models::News>> {
+async fn get_news_as_json(count: Option<i64>, offset: Option<i64>) -> Json<Vec<sql::models::News>> {
     let count = count.unwrap_or(100);
     let offset = offset.unwrap_or(0);
 
@@ -54,12 +55,17 @@ async fn get_count() -> Json<i64> {
     Json(sql::get_count())
 }
 
+#[get("/shutdown")]
+async fn shutdown(shutdown: Shutdown) {
+    shutdown.notify();
+}
+
 #[rocket::launch]
 pub fn rocket() -> _ {
     scrap::loop_scrap();
 
     rocket::build()
-        .mount("/", routes![home, get_news_as_json, get_count])
+        .mount("/", routes![home, get_news_as_json, get_count, shutdown])
         .mount("/static", FileServer::from(relative!("static")))
         .attach(Template::fairing())
 }
