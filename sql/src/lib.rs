@@ -1,5 +1,5 @@
 use diesel::associations::HasTable;
-use diesel::{ Connection, ExpressionMethods, PgConnection, RunQueryDsl, SelectableHelper };
+use diesel::{ Connection, ExpressionMethods, PgConnection, RunQueryDsl };
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
