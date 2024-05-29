@@ -3,10 +3,10 @@ FROM rust:1.78
 WORKDIR /
 
 RUN cargo install diesel_cli --no-default-features --features postgres &&\
-    git clone https://github.com/iamhabi/server-news.git
+    git clone https://github.com/iamhabi/MyNews.git
     
-WORKDIR /server-news/sql
+WORKDIR /MyNews/sql
 
 ENTRYPOINT diesel setup &&\
-    cd /server-news &&\
+    cd /MyNews &&\
     cargo run --bin server
