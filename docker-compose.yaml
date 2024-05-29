@@ -9,15 +9,16 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:5432/${DATABASE_DB}
+      - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:${DATABASE_PORT}/${DATABASE_DB}
 
   postgres:
     image: postgres
     container_name: my-news-postgres
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     environment:
+      - PGPORT=${DATABASE_PORT}
       - POSTGRES_DB=${DATABASE_DB}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
