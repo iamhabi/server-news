@@ -7,8 +7,10 @@ services:
     depends_on:
       - postgres
     ports:
-      - "3000:3000"
+      - "${ROCKET_PORT}:${ROCKET_PORT}"
     environment:
+      - ROCKET_ADDRESS=${ROCKET_ADDRESS}
+      - ROCKET_PORT=${ROCKET_PORT}
       - DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:${DATABASE_PORT}/${DATABASE_DB}
 
   postgres:
