@@ -8,6 +8,8 @@ services:
       - postgres
     ports:
       - "${ROCKET_PORT}:${ROCKET_PORT}"
+    volumes:
+      - ./:/mynews-server
     environment:
       - ROCKET_ADDRESS=${ROCKET_ADDRESS}
       - ROCKET_PORT=${ROCKET_PORT}

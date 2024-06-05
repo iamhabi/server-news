@@ -1,12 +1,11 @@
 FROM rust:1.78
 
-WORKDIR /
+WORKDIR /mynews-server
 
-RUN cargo install diesel_cli --no-default-features --features postgres &&\
-    git clone https://github.com/iamhabi/MyNews.git
+RUN cargo install diesel_cli --no-default-features --features postgres
     
-WORKDIR /MyNews/sql
+WORKDIR /mynews-server/sql
 
 ENTRYPOINT diesel setup &&\
-    cd /MyNews &&\
+    cd .. &&\
     cargo run --bin server
