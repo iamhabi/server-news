@@ -39,15 +39,13 @@ function onLoadPage() {
     const select = document.getElementById("count");
 
     select.value = count;
-    
+
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
 
-    var query = "/?count=" + count + "&page=" + page;
-
-    if (params.count != count || params.page != page) {
-        window.location.href = query;
+    if (params.count == null) {
+        window.location.href = '/?count=' + count + '&page=1';
     }
 }
 
@@ -58,13 +56,11 @@ function onSelectCount() {
 
     localStorage['count'] = count;
 
-    window.location.reload();
+    window.location.href = '/?count=' + count + '&page=1';
 }
 
 function onSelectPage(page) {
-    localStorage['page'] = page;
-
-    window.location.reload();
+    window.location.href = '/?count=' + localStorage['count'] + '&page=' + page;
 }
 
 // https://stackoverflow.com/a/46385144
@@ -106,8 +102,12 @@ function getPageList(totalPages, page, maxLength) {
 $(function () {
     var paginationSize = 7; 
     var totalPages = {{ data.page_count }};
+
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
     
-    var currentPage = parseInt(localStorage['page']) || 1;
+    var currentPage = params.page || 1;
 
     function showPage(whichPage) {
         if (whichPage < 1 || whichPage > totalPages) return false;
@@ -117,10 +117,11 @@ $(function () {
         $(".pagination").children().remove();
 
         getPageList(totalPages, currentPage, paginationSize).forEach( item => {
+
             $(".pagination").append(
                 $("<a>")
                     .addClass(item ? "current-page" : "disabled")
-                    .toggleClass("active", item === currentPage)          
+                    .toggleClass("active", item == currentPage)
                     .attr({
                         onclick: "onSelectPage(" + item + ")"
                     })
