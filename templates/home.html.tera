@@ -66,7 +66,9 @@ function onSelectPage(page) {
 // https://stackoverflow.com/a/46385144
 
 function getPageList(totalPages, page, maxLength) {
-    if (maxLength < 5) throw "maxLength must be at least 5";
+    if (maxLength < 5) {
+        maxLength = 5;
+    };
 
     function range(start, end) {
         return Array.from(Array(end - start + 1), (_, i) => i + start); 
@@ -92,7 +94,7 @@ function getPageList(totalPages, page, maxLength) {
         return range(1, sideWidth)
             .concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
     }
-    
+
     // Breaks on both sides
     return range(1, sideWidth)
         .concat(0, range(page - leftWidth, page + rightWidth),
@@ -107,7 +109,7 @@ $(function () {
         get: (searchParams, prop) => searchParams.get(prop),
     });
     
-    var currentPage = params.page || 1;
+    var currentPage = parseInt(params.page) || 1;
 
     function showPage(whichPage) {
         if (whichPage < 1 || whichPage > totalPages) return false;
@@ -116,8 +118,7 @@ $(function () {
 
         $(".pagination").children().remove();
 
-        getPageList(totalPages, currentPage, paginationSize).forEach( item => {
-
+        getPageList(totalPages, currentPage, paginationSize).forEach(item => {
             $(".pagination").append(
                 $("<a>")
                     .addClass(item ? "current-page" : "disabled")
