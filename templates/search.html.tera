@@ -1,0 +1,23 @@
+{% extends "home-base" %}
+
+{% block content %}
+
+<div class="gallery">
+    <h1>search</h1>
+
+    <form action="/search">
+        <input type="text" placeholder="Search news.." name="query">
+        <button type="submit">Search</button>
+    </form>
+    
+    <br/><hr/>
+
+    {% for n in news %}
+        <div class="news">
+            <a class="content" href="{{ n.link }}" target="_blank">{{ n.title }}</a>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

@@ -40,6 +40,17 @@ async fn home(count: Option<i64>, page: Option<i64>) -> Template {
     Template::render("home", map)
 }
 
+#[get("/search?<query>")]
+async fn search(query: &str) -> Template {
+    let news = sql::search(query);
+    
+    let mut map = HashMap::new();
+
+    map.insert("news", news);
+
+    Template::render("search", map)
+}
+
 #[get("/json?<count>&<offset>")]
 async fn get_news_as_json(count: Option<i64>, offset: Option<i64>) -> Json<Vec<sql::models::News>> {
     let count = count.unwrap_or(100);
@@ -48,6 +59,13 @@ async fn get_news_as_json(count: Option<i64>, offset: Option<i64>) -> Json<Vec<s
     let news = sql::get_news(count, offset);
 
     Json(news)
+}
+
+#[get("/json/search?<query>")]
+async fn search_as_json(query: &str) -> Json<Vec<sql::models::News>> {
+    let result = sql::search(query);
+
+    Json(result)
 }
 
 #[get("/count")]
@@ -65,7 +83,7 @@ pub fn rocket() -> _ {
     scrap::loop_scrap();
 
     rocket::build()
-        .mount("/", routes![home, get_news_as_json, get_count, shutdown])
+        .mount("/", routes![home, search, get_news_as_json, search_as_json, get_count, shutdown])
         .mount("/static", FileServer::from(relative!("static")))
         .attach(Template::fairing())
 }

@@ -53,6 +53,21 @@ pub fn get_news(count: i64, offset: i64) -> Vec<News> {
         .expect("Error loading news")
 }
 
+pub fn search(query: &str) -> Vec<News> {
+    use self::schema::news::dsl::*;
+
+    let connection = &mut establish_connection();
+
+    let query = format!("%{query}%");
+    
+    news
+        .select(News::as_select())
+        .filter(schema::news::title.ilike(query))
+        .order_by(schema::news::id.desc())
+        .load(connection)
+        .expect("Error loading news")
+}
+
 pub fn get_count() -> i64 {
     use self::schema::news::dsl::*;
 

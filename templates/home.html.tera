@@ -13,6 +13,13 @@
 
     <br/><br/>
     
+    <form action="/search">
+        <input type="text" placeholder="Search news.." name="query">
+        <button type="submit">Search</button>
+    </form>
+    
+    <br/><br/>
+    
     <div class="pagination">
     </div>
 
